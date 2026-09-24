@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\VisitFormRequest;
 use App\Models\AdminLog;
+use App\Models\PatientReminder;
 use App\Models\SmsUser;
 use App\Models\User;
 use App\Models\Visit;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 use Morilog\Jalali\CalendarUtils;
+use Morilog\Jalali\Jalalian;
 use Throwable;
 
 class VisitsController extends Controller
@@ -71,7 +73,7 @@ class VisitsController extends Controller
      */
     public function create(string $id, Request $request)
     {
-        $item = User::with(['insurance', 'visits.insurance'])->findOrfail($id);
+        $item = User::with(['insurance', 'visits.insurance', 'visits.reminders', 'reminders.visit'])->findOrfail($id);
 
         return view('visits.create', compact('item'));
     }
@@ -114,9 +116,27 @@ class VisitsController extends Controller
      */
     public function edit(string $id)
     {
-        $item = Visit::with(['user.insurance', 'user.visits.insurance'])->findOrFail($id);
+        $item = Visit::with(['user.insurance', 'user.visits.insurance', 'user.visits.reminders', 'user.reminders.visit', 'reminders'])->findOrFail($id);
+        $todayJalali = Jalalian::now();
+        $followUpMonths = [1 => 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+        $followUpMonthDays = collect(range(1, 12))->mapWithKeys(function ($month) use ($todayJalali) {
+            $year = $month < $todayJalali->getMonth() ? $todayJalali->getYear() + 1 : $todayJalali->getYear();
 
-        return view('visits.edit', compact('item'));
+            return [$month => (new Jalalian($year, $month, 1))->getMonthDays()];
+        });
+        $dayNames = [0 => 'یکشنبه', 'دوشنبه', 'سهشنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'];
+        $followUpMonthWeekdays = collect(range(1, 12))->mapWithKeys(function ($month) use ($todayJalali, $dayNames, $followUpMonthDays) {
+            $year = $month < $todayJalali->getMonth() ? $todayJalali->getYear() + 1 : $todayJalali->getYear();
+
+            return [$month => collect(range(1, $followUpMonthDays[$month]))->mapWithKeys(function ($day) use ($year, $month, $dayNames) {
+                $gregorian = CalendarUtils::toGregorian($year, $month, $day);
+                $weekday = Carbon::create($gregorian[0], $gregorian[1], $gregorian[2], 0, 0, 0, 'Asia/Tehran')->dayOfWeek;
+
+                return [$day => $dayNames[$weekday]];
+            })];
+        });
+
+        return view('visits.edit', compact('item', 'followUpMonths', 'followUpMonthDays', 'followUpMonthWeekdays'));
     }
 
     /**
@@ -126,6 +146,9 @@ class VisitsController extends Controller
     {
         $item = Visit::findOrFail($id);
         $price = $request->validated('hazine');
+        if ($request->filled('follow_up_period') && PatientReminder::where('visit_id', $item->id)->exists()) {
+            throw ValidationException::withMessages(['follow_up_period' => 'برای این ویزیت قبلاً یادآور ثبت شده است.']);
+        }
 
         $item->update([
             'elat' => $request['elat'],
@@ -137,6 +160,31 @@ class VisitsController extends Controller
             'raveshdaryaft' => $request['raveshdaryaft'],
             'tozihat' => $request['tozihat'],
         ]);
+
+        if ($request->filled('follow_up_period')) {
+            if ($request->input('follow_up_period') === 'custom') {
+                $todayJalali = Jalalian::now();
+                $month = (int) $request->input('follow_up_month');
+                $day = (int) $request->input('follow_up_day');
+                $year = $month < $todayJalali->getMonth() ? $todayJalali->getYear() + 1 : $todayJalali->getYear();
+                $gregorian = CalendarUtils::toGregorian($year, $month, $day);
+                $dueDate = Carbon::create($gregorian[0], $gregorian[1], $gregorian[2], 0, 0, 0, 'Asia/Tehran');
+            } else {
+                $dueDate = Carbon::today('Asia/Tehran')->addDays((int) $request->input('follow_up_period'));
+            }
+
+            PatientReminder::create([
+                'user_id' => $item->user_id,
+                'visit_id' => $item->id,
+                'created_by' => auth('admin')->id(),
+                'type' => 'revisit',
+                'due_date' => $dueDate,
+                'jalali_date' => Jalalian::fromCarbon($dueDate)->format('Y/m/d'),
+                'reminder_at' => $dueDate->copy()->subDay()->setTime(9, 0),
+                'status' => 'pending',
+                'notes' => $request->input('follow_up_notes'),
+            ]);
+        }
 
         AdminLog::create([
             'admin_id' => Auth()->user()->id,
@@ -168,6 +216,20 @@ class VisitsController extends Controller
         session()->flash('success', 'حذف  با موفقیت انجام شد');
 
         return redirect()->back();
+    }
+
+    public function completeReminder(PatientReminder $reminder)
+    {
+        $reminder->update(['status' => 'completed']);
+
+        return back()->with('success', 'یادآور ویزیت مجدد انجام‌شده ثبت شد.');
+    }
+
+    public function destroyReminder(PatientReminder $reminder)
+    {
+        $reminder->update(['status' => 'cancelled']);
+
+        return back()->with('success', 'یادآور ویزیت مجدد لغو شد.');
     }
 
     public function sendNewVisitSMS($caseNumber, User $user, $visitId)

@@ -8,4 +8,5 @@ return [
     'cronToken' => env('CRON_TOKEN'),
     // Enable after the database reminder columns are installed on the server.
     'appointmentReminderEnabled' => env('APPOINTMENT_REMINDER_ENABLED', false),
+    'followUpTemplateId' => env('FOLLOW_UP_TEMPLATE_ID', 650159),
 ];

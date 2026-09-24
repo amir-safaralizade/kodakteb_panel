@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\front\FrontController;
 use App\Models\AdminLog;
 use App\Models\Appointment;
+use App\Models\PatientReminder;
 use App\Models\SmsUser;
 use App\Models\User;
 use App\Models\Visit;
@@ -18,6 +19,78 @@ use Throwable;
 
 class CronController extends Controller
 {
+    public function followUpReminders(Request $request)
+    {
+        $configuredToken = (string) config('properties.cronToken');
+        $receivedToken = (string) ($request->bearerToken() ?: $request->query('token', ''));
+        if ($configuredToken === '' || $receivedToken === '' || ! hash_equals($configuredToken, $receivedToken)) {
+            return response()->json(['ok' => false, 'message' => 'Unauthorized.'], 401);
+        }
+
+        $now = Carbon::now('Asia/Tehran');
+        $dueQuery = PatientReminder::with('user')->where('status', 'pending')
+            ->whereNull('sms_sent_at')->where('reminder_at', '<=', $now)
+            ->where('sms_attempts', '<', 5)
+            ->where(function ($query) use ($now) {
+                $query->whereNull('sms_last_attempt_at')->orWhere('sms_last_attempt_at', '<=', $now->copy()->subMinutes(5));
+            })->where(function ($query) use ($now) {
+                $query->whereNull('sms_locked_at')->orWhere('sms_locked_at', '<=', $now->copy()->subMinutes(10));
+            });
+
+        $templateId = config('properties.followUpTemplateId');
+        if (! $templateId) {
+            return response()->json(['ok' => true, 'enabled' => false, 'due' => (clone $dueQuery)->count(), 'message' => 'FOLLOW_UP_TEMPLATE_ID is not configured.']);
+        }
+
+        $ids = (clone $dueQuery)->orderBy('reminder_at')->limit(50)->pluck('id');
+        $sent = 0;
+        $failed = 0;
+        foreach ($ids as $id) {
+            if (SmsUser::where('object_type', PatientReminder::class)->where('object_id', $id)->exists()) {
+                PatientReminder::whereKey($id)->update(['sms_sent_at' => $now, 'sms_locked_at' => null, 'sms_error' => null]);
+
+                continue;
+            }
+            $reminder = DB::transaction(function () use ($id, $now) {
+                $item = PatientReminder::with('user')->lockForUpdate()->find($id);
+                if (! $item || $item->status !== 'pending' || $item->sms_sent_at
+                    || ($item->sms_locked_at && $item->sms_locked_at->isAfter($now->copy()->subMinutes(10)))) {
+                    return null;
+                }
+                $item->update(['sms_locked_at' => $now, 'sms_last_attempt_at' => $now, 'sms_attempts' => $item->sms_attempts + 1]);
+
+                return $item;
+            });
+            if (! $reminder) {
+                continue;
+            }
+
+            try {
+                $response = Http::withHeaders([
+                    'Content-Type' => 'application/json', 'Accept' => 'text/plain', 'x-api-key' => config('properties.smsIrApiKey'),
+                ])->timeout(15)->post(config('properties.smsIrVerifyUrl'), [
+                    'mobile' => $reminder->user?->phone,
+                    'templateId' => (int) $templateId,
+                    'Parameters' => [['name' => 'DATE', 'value' => str_replace('/', '-', $reminder->jalali_date)]],
+                ]);
+                $data = $response->json();
+                if ($response->successful() && (int) ($data['status'] ?? 0) === 1) {
+                    $reminder->update(['sms_sent_at' => Carbon::now('Asia/Tehran'), 'sms_locked_at' => null, 'sms_error' => null]);
+                    SmsUser::create(['user_id' => $reminder->user_id, 'content' => 'revisitReminder', 'object_type' => PatientReminder::class, 'object_id' => $reminder->id, 'created_at' => Carbon::now('Asia/Tehran')]);
+                    $sent++;
+                } else {
+                    $reminder->update(['sms_locked_at' => null, 'sms_error' => mb_substr((string) ($data['message'] ?? 'خطای سرویس پیامک'), 0, 500)]);
+                    $failed++;
+                }
+            } catch (Throwable $exception) {
+                $reminder->update(['sms_locked_at' => null, 'sms_error' => mb_substr($exception->getMessage(), 0, 500)]);
+                $failed++;
+            }
+        }
+
+        return response()->json(['ok' => true, 'enabled' => true, 'checked' => $ids->count(), 'sent' => $sent, 'failed' => $failed]);
+    }
+
     public function appointmentReminders(Request $request)
     {
         $configuredToken = (string) config('properties.cronToken');

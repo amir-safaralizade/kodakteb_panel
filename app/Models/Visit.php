@@ -29,6 +29,11 @@ class Visit extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function reminders()
+    {
+        return $this->hasMany(PatientReminder::class);
+    }
+
     public function getCreateJAttribute()
     {
         if ($this->created_at) {

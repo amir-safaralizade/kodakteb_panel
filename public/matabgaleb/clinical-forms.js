@@ -1,6 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
     const digits = value => value.replace(/[۰-۹٠-٩]/g, char => String('۰۱۲۳۴۵۶۷۸۹'.includes(char) ? '۰۱۲۳۴۵۶۷۸۹'.indexOf(char) : '٠١٢٣٤٥٦٧٨٩'.indexOf(char)));
     document.querySelectorAll('[data-clinical-form]').forEach(form => {
+        const followUpPeriod = form.querySelector('[data-follow-up-period]');
+        const followUpCustom = form.querySelector('[data-follow-up-custom]');
+        const toggleFollowUpDate = () => { if (followUpCustom) followUpCustom.hidden = followUpPeriod?.value !== 'custom'; };
+        followUpPeriod?.addEventListener('change', toggleFollowUpDate);
+        toggleFollowUpDate();
+        const followUpMonth = form.querySelector('[data-follow-up-month]');
+        const followUpDay = form.querySelector('[data-follow-up-day]');
+        const followUpGrid = form.querySelector('[data-follow-up-days-grid]');
+        const followUpDays = JSON.parse(form.dataset.followUpDays || '{}');
+        const followUpWeekdays = JSON.parse(form.dataset.followUpWeekdays || '{}');
+        function renderFollowUpDays() {
+            if (!followUpMonth || !followUpDay || !followUpGrid) return;
+            const count = Number(followUpDays[followUpMonth.value] || 31);
+            let selected = Number(followUpDay.value);
+            if (selected > count) { selected = 0; followUpDay.value = ''; }
+            followUpGrid.innerHTML = '';
+            for (let day = 1; day <= count; day++) {
+                const weekday = (followUpWeekdays[followUpMonth.value] || {})[day] || '';
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'day-button' + (day === selected ? ' is-selected' : '') + (weekday === 'جمعه' ? ' is-friday' : '');
+                button.innerHTML = '<strong>' + day + '</strong><small>' + weekday + '</small>';
+                button.setAttribute('aria-label', 'روز ' + day + '، ' + weekday);
+                button.addEventListener('click', () => {
+                    followUpGrid.querySelectorAll('.day-button').forEach(item => item.classList.remove('is-selected'));
+                    button.classList.add('is-selected'); followUpDay.value = day; updateState();
+                });
+                followUpGrid.appendChild(button);
+            }
+        }
+        followUpMonth?.addEventListener('change', renderFollowUpDays);
+        renderFollowUpDays();
         let submitting = false;
         const state = form.querySelector('[data-save-state]');
         const primary = form.querySelector('[data-primary-submit]');

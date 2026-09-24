@@ -2,10 +2,11 @@
 @section('header_title', 'نوبت‌دهی')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=4">
+<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=5">
 
 <div class="appointment-heading">
     <div><h1 class="page-title">نوبت‌دهی</h1><p>ثبت سریع نوبت با تاریخ شمسی و اتصال خودکار به پرونده بیمار</p></div>
+    <a class="btn btn-outline-primary" href="https://www.time.ir/" target="_blank" rel="noopener noreferrer">تقویم و تعطیلات رسمی ↗</a>
 </div>
 
 <section class="appointment-card" aria-labelledby="new-appointment-title">

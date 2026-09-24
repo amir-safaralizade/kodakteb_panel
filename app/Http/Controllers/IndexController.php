@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\PatientReminder;
 use App\Models\User;
 use App\Models\Visit;
 use Carbon\Carbon;
@@ -25,6 +26,10 @@ class IndexController extends Controller
                 ->whereDate('appointment_date', Carbon::today('Asia/Tehran'))
                 ->where('status', 'scheduled')
                 ->orderBy('appointment_time')->get(),
+            'upcomingReminders' => PatientReminder::with(['user', 'visit'])
+                ->where('status', 'pending')
+                ->whereDate('due_date', '<=', Carbon::today('Asia/Tehran')->addDays(7))
+                ->orderBy('due_date')->limit(20)->get(),
         ]);
     }
 }

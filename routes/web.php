@@ -46,6 +46,8 @@ Route::middleware(['auth:admin'])->prefix('dashbord')->group(function () {
     Route::match(['get', 'post'], 'user/searchresult', [UserController::class, 'searchUsers'])->name('user.search');
     Route::resource('user', UserController::class);
     Route::resource('visits', VisitsController::class)->except(['create', 'store']);
+    Route::patch('visits/reminders/{reminder}/complete', [VisitsController::class, 'completeReminder'])->name('visits.reminders.complete');
+    Route::delete('visits/reminders/{reminder}', [VisitsController::class, 'destroyReminder'])->name('visits.reminders.destroy');
     Route::get('visits/create/{id}', [VisitsController::class, 'create'])->name('visits.create');
     Route::post('visits/sore/{id}', [VisitsController::class, 'store'])->name('visits.store');
     Route::get('/convert', [IndexController::class, 'convertdata'])->name('convertdata');
@@ -76,3 +78,5 @@ Route::get('/cronsmatab/cron1', [CronController::class, 'cron1']);
 Route::get('/cronsmatab/cron2', [CronController::class, 'sendStatisicData']);
 Route::get('/cronsmatab/appointment-reminders', [CronController::class, 'appointmentReminders'])
     ->name('cron.appointment-reminders')->middleware('throttle:10,1');
+Route::get('/cronsmatab/follow-up-reminders', [CronController::class, 'followUpReminders'])
+    ->name('cron.follow-up-reminders')->middleware('throttle:10,1');

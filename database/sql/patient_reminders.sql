@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS `patient_reminders` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` BIGINT UNSIGNED NOT NULL,
+  `visit_id` BIGINT UNSIGNED NULL,
+  `created_by` BIGINT UNSIGNED NULL,
+  `type` VARCHAR(50) NOT NULL DEFAULT 'revisit',
+  `due_date` DATE NOT NULL,
+  `jalali_date` VARCHAR(10) NOT NULL,
+  `reminder_at` DATETIME NOT NULL,
+  `status` ENUM('pending','completed','cancelled') NOT NULL DEFAULT 'pending',
+  `notes` VARCHAR(1000) NULL,
+  `sms_sent_at` DATETIME NULL,
+  `sms_attempts` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  `sms_last_attempt_at` DATETIME NULL,
+  `sms_locked_at` DATETIME NULL,
+  `sms_error` VARCHAR(500) NULL,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `patient_reminders_due_index` (`status`,`reminder_at`,`sms_sent_at`),
+  KEY `patient_reminders_user_index` (`user_id`),
+  UNIQUE KEY `patient_reminders_visit_unique` (`visit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -15,7 +15,7 @@
 
     <link href="{{ asset('matabgaleb/assets/css/bootstrap.min.css') }}" rel="stylesheet">
     <script src="{{ asset('matabgaleb/assets/js/chart.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('matabgaleb/style.css') }}?v=6">
+    <link rel="stylesheet" href="{{ asset('matabgaleb/style.css') }}?v=11">
     <meta name="theme-color" content="#137c72">
     <script>if (window.Chart) { Chart.defaults.font.family = 'iran, sans-serif'; Chart.defaults.color = '#6c807d'; }</script>
     <title>

@@ -30,6 +30,16 @@
         @endforeach
     </div>
 </section>
+<section class="surface dashboard-reminders">
+    <div class="section-heading"><div><h2>پیگیری ویزیت مجدد</h2><p>یادآورهای سررسیدشده و هفت روز آینده</p></div><span class="section-count">{{ $upcomingReminders->count() }} مورد</span></div>
+    <div class="reminder-dashboard-list">
+        @forelse($upcomingReminders as $reminder)
+            <article class="reminder-dashboard-item"><span class="reminder-date">{{ $reminder->jalali_date }}</span><div><strong>{{ trim(($reminder->user?->name ?? '').' '.($reminder->user?->lastName ?? '')) ?: 'بیمار بدون نام' }}</strong><small>{{ $reminder->notes ?: 'ویزیت مجدد طبق پیشنهاد پزشک' }}</small></div><a href="{{ $reminder->visit ? route('visits.edit', $reminder->visit_id) : route('user.show', $reminder->user_id) }}">مشاهده</a><form method="post" action="{{ route('visits.reminders.complete', $reminder) }}">@csrf @method('PATCH')<button class="btn btn-sm btn-outline-primary" type="submit">انجام شد</button></form></article>
+        @empty
+            <div class="shift-empty">یادآور نزدیک یا سررسیدشده‌ای وجود ندارد.</div>
+        @endforelse
+    </div>
+</section>
 <div class="dashboard-grid">
     <section class="surface recent-visits">
         <div class="section-heading"><div><h2>آخرین ویزیت‌ها</h2><p>تازه‌ترین مراجعات ثبت‌شده در مطب</p></div><a href="{{ route('visits.index') }}">مشاهده همه ←</a></div>

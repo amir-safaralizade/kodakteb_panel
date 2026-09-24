@@ -76,6 +76,11 @@ class User extends Authenticatable
         return $this->belongsTo(Insurance::class, 'insurance_id');
     }
 
+    public function reminders()
+    {
+        return $this->hasMany(PatientReminder::class);
+    }
+
     public static function identity() {}
 
     public function Age()
