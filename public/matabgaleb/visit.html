@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="father">
+
+        <div class="sidebar">
+
+            <div class="item-box">
+                <p class="item-title"> پرونده ها</p>
+                <ul>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                    <li> <a href="#" class="item-btn"> ثسبسث دکمه یکیک یک</a> </li>
+                </ul>
+            </div>
+
+            <div class="item-box">
+                <p class="item-title"> حسابداری</p>
+                <ul>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                </ul>
+            </div>
+
+            <div class="item-box">
+                <p class="item-title">ویزیت ها  </p>
+                <ul>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                </ul>
+            </div>
+
+            <div class="item-box">
+                <p class="item-title">عنوان یک</p>
+                <ul>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                    <li> <a href="#" class="item-btn">دکمه یک</a> </li>
+                </ul>
+            </div>
+
+        </div>
+    
+        <div class="mainsection">
+            <div class="cotainer-d">
+
+                <div class="navbar">
+                    <form class="search" action="#">
+                        <input  class="searchTherm" type="text" placeholder="جست و جو..." name="searchInput" style="font-family: 'iran'">
+                        <button class="searchButton" type="submit" > جست و جو  </button>
+                      </form>
+                </div>
+
+                <div class="fcontainer">
+
+                    <div class="header">
+                        <p class="head-title"> ایجاد پرونده  </p>
+                    </div>
+    
+    
+                    <div class="main-sec">
+
+                        <form method="post"  action="<?= URLBASE.'/admins/addvisit'; ?>" enctype="multipart/form-data">
+                            <div class="form-groups">
+        
+                                <div class="form-group">
+                                    <input class="form-control" name="pnumber" placeholder="شماره پرونده " type="text" autofocus required>
+                                </div>
+        
+                                <div class="form-group">
+                                    <input class="form-control" name="name" placeholder=" نام مراجع " type="text">
+                                </div>
+        
+                                <div class="form-group dt-area">
+        
+                                    <label for="elat" class="btn btn-primary px-5  w-75">علت مراجعه</label>
+        
+                                    <textarea class="form-control" cols="5" rows="5" name="elat">
+        
+                                    </textarea>
+        
+                                </div>
+        
+                                <div class="form-group dt-area">
+                                    <label for="alaem" class="btn btn-primary px-5 w-75">علائم بالینی و معاینه </label>
+        
+                                    <textarea class="form-control" cols="5" rows="5" name="alaem">
+        
+                                    </textarea>
+        
+                                </div>
+                                
+                                <div class="form-group dt-area">
+                                    <label for="tashkhis" class="btn btn-primary px-5 w-75">  تشخیص  </label>
+        
+                                    <textarea class="form-control" cols="5" rows="5" name="tashkhis">
+        
+                                    </textarea>
+        
+                                </div>
+        
+        
+                                <div class="form-group dt-area">
+                                    <label for="tashkhis" class="btn btn-primary px-5 w-75">  پلن درمانی  </label>
+        
+                                    <textarea class="form-control" cols="5" rows="5" name="plan">
+        
+                                    </textarea>
+        
+                                </div>
+        
+                                <br>
+                        
+                                <div class="form-group dt-area">
+                                    <select name="searchkey" id="searchkey">
+                                        <option value="آزاد"  style="font-family: 'iran';"> آزاد</option>
+                                        <option value="آزاد"> تامین اجتماعی</option>
+                                        <option value="نیروهای مسلح"> نیروهای مسلح</option>
+                                        <option value="سایر"> سایر بیمه ها ... </option>
+                                    </select>
+                                </div>
+        
+        
+                                <div class="form-group" class="mt-5">
+                                    <input class="form-control" name="hazine" placeholder="هزینه" type="number">
+                                </div>
+        
+                                <button type="submit" name="add-parvande" class="btn btn-success btn-block mt-3"> ثبت ویزیت </button>
+        
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

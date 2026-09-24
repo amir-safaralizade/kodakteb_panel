@@ -1,0 +1,40 @@
+@font-face {
+    font-family: iran;
+    src: url('fonts/Vazir-Medium.woff2') format('woff2');
+    font-display: swap;
+}
+
+html { scroll-behavior: smooth; }
+body .profile-card {
+    border: 1px solid #dce8e0;
+    border-radius: 24px;
+    box-shadow: 0 16px 50px #264c3a0a;
+}
+body .profile-card:hover { transform: none; }
+body .profile-header { padding: 44px 24px; }
+body .profile-header h1 { line-height: 1.8; }
+body .profile-header h2 { font-size: 15px; opacity: .85; }
+body .profile-img { margin-bottom: 22px !important; }
+body .social-section, body .contact-info {
+    border: 1px solid #e3ebe7;
+    border-radius: 16px;
+    box-shadow: none;
+    padding: 26px;
+}
+body .section-title { font-size: 19px; }
+body .btn { border-radius: 10px; padding: 13px 22px; font-size: 15px; }
+body .btn-call { background: #137c72; }
+body .btn-call:hover { background: #0c5e56; }
+a:focus-visible { outline: 3px solid #82bda7; outline-offset: 4px; }
+@media (max-width: 640px) {
+    body .container { padding: 20px 14px !important; }
+    body .profile-card > .p-4 { padding: 18px !important; }
+    body .social-section, body .contact-info { padding: 20px 16px; }
+    body .btn { width: 100% !important; }
+    body .profile-header h1 { font-size: 22px; }
+    body .contact-info h5 { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition: none !important; transform: none !important; }
+}
