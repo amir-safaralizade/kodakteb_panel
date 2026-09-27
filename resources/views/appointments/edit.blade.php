@@ -2,7 +2,7 @@
 @section('header_title', 'ویرایش نوبت')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=6">
+<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=9">
 <div class="appointment-heading"><div><h1 class="page-title">ویرایش نوبت</h1><p>{{ $appointment->patient_name }} · {{ $appointment->phone }}</p></div><a class="btn btn-outline-primary" href="{{ route('appointments.index', ['month' => $appointment->jalali_month]) }}">بازگشت به نوبت‌ها</a></div>
 
 <section class="appointment-card">

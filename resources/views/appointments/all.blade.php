@@ -2,7 +2,7 @@
 @section('header_title', 'همه نوبت‌ها')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=6">
+<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=9">
 
 <div class="appointment-heading">
     <div>

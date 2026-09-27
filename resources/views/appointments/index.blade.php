@@ -2,7 +2,7 @@
 @section('header_title', 'نوبت‌دهی')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=6">
+<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=9">
 
 <div class="appointment-heading">
     <div><h1 class="page-title">نوبت‌دهی</h1><p>ثبت سریع نوبت با تاریخ شمسی و اتصال خودکار به پرونده بیمار</p></div>
