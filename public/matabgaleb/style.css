@@ -1650,7 +1650,7 @@ td p {
 .history-empty p { margin: 0; font-size: 11px; }
 .patient-active-reminders{margin-bottom:18px;padding:18px;border:1px solid #ead8a8;border-radius:14px;background:#fffaf0}.active-reminders-heading{display:flex;align-items:center;gap:12px;padding-bottom:13px;margin-bottom:12px;border-bottom:1px solid #efe1bb}.active-reminders-heading>span{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:#f4e5bd;font-size:19px}.active-reminders-heading h2{margin:0 0 3px;font-size:14px;color:#624d20}.active-reminders-heading p{margin:0;color:#88784f;font-size:10px}.active-reminders-list{display:grid;gap:9px}.active-reminders-list article{display:flex;align-items:center;gap:14px;padding:11px 13px;background:#fff;border:1px solid #ebdfc1;border-radius:10px}.active-reminder-date{display:flex;flex-direction:column;padding-left:14px;border-left:1px solid #eee1c2}.active-reminder-date small{color:#8c7b51;font-size:9px}.active-reminder-date strong{margin-top:3px;color:#674f19;font-size:13px;direction:ltr}.active-reminder-content{min-width:0;flex:1}.active-reminder-content>strong{font-size:12px}.active-reminder-content p{margin:3px 0;color:#4d5e58;font-size:11px;line-height:1.8}.active-reminder-content small{color:var(--muted);font-size:9px}.history-reminder{padding:10px 12px;border-right:3px solid #c89b43;background:#fffaf0;border-radius:7px}.history-reminder dt{color:#765a20}.history-reminder .follow-up-status{margin-right:7px}
 .follow-up-section{border-top:3px solid #b18a45}.follow-up-list{margin-top:20px;padding-top:18px;border-top:1px solid #edf1ee}.follow-up-list h3{font-size:12px;margin:0 0 10px}.follow-up-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-top:7px;border:1px solid #e0e8e4;border-radius:9px;background:#fafcfb}.follow-up-item strong{font-size:12px}.follow-up-item>small{color:var(--muted);font-size:10px}.follow-up-status{padding:3px 7px;border-radius:12px;font-size:9px;font-weight:700}.follow-up-status--pending{background:#fff2cf;color:#896516}.follow-up-status--completed{background:#e5f5ed;color:#277159}.follow-up-status--cancelled{background:#f2f2f2;color:#777}.follow-up-actions{display:flex;align-items:center;gap:8px;margin-right:auto}.reminder-cancel{border:0;background:transparent;color:#b24858;font-size:10px}
-.follow-up-calendar{margin-top:18px;padding:16px;border:1px solid #e5dfd0;background:#fffdf8;border-radius:12px}.follow-up-calendar>.appointment-field{max-width:260px}.follow-up-calendar .appointment-field label,.follow-up-calendar .day-picker legend{display:block;font-size:12px;font-weight:700;color:#4f625c;margin-bottom:7px}.follow-up-calendar .day-picker{border:0;padding:0;margin:16px 0 0}.follow-up-calendar .day-grid{display:grid;grid-template-columns:repeat(16,minmax(38px,1fr));gap:7px}.follow-up-calendar .day-button{min-height:54px;border:1px solid #d9e5e2;border-radius:10px;background:#fafcfb;color:#31534d;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.follow-up-calendar .day-button strong{font-size:14px}.follow-up-calendar .day-button small{font-size:9px;color:#78908a;font-weight:500}.follow-up-calendar .day-button.is-friday{color:#c23d50;border-color:#f0cdd3;background:#fff8f9}.follow-up-calendar .day-button.is-friday small{color:#c23d50}.follow-up-calendar .day-button.is-selected{background:#137c72;border-color:#137c72;color:#fff}.follow-up-calendar .day-button.is-selected small{color:#dff5ef}.follow-up-calendar .day-button.is-selected.is-friday{background:#b92f45;border-color:#b92f45}.follow-up-duplicate-note{padding:13px 15px;border-radius:9px;background:#f8f3e8;color:#765f2e;font-size:11px}
+.follow-up-calendar{margin-top:18px;padding:16px;border:1px solid #e5dfd0;background:#fffdf8;border-radius:12px}.follow-up-calendar>.appointment-field{max-width:260px}.follow-up-calendar .appointment-field label,.follow-up-calendar .day-picker legend{display:block;font-size:12px;font-weight:700;color:#4f625c;margin-bottom:7px}.follow-up-calendar .day-picker{border:0;padding:0;margin:16px 0 0}.follow-up-calendar .day-grid{display:grid;grid-template-columns:repeat(16,minmax(38px,1fr));gap:7px}.follow-up-calendar .day-button{min-height:54px;border:1px solid #d9e5e2;border-radius:10px;background:#fafcfb;color:#31534d;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.follow-up-calendar .day-button strong{font-size:14px}.follow-up-calendar .day-button small{font-size:9px;color:#78908a;font-weight:500}.follow-up-calendar .day-button.is-friday{color:#c23d50;border-color:#f0cdd3;background:#fff8f9}.follow-up-calendar .day-button.is-friday small{color:#c23d50}.follow-up-calendar .day-button.is-today{border-color:#d69e2e;background:#fff7df;color:#845b05;box-shadow:inset 0 0 0 2px rgba(214,158,46,.18)}.follow-up-calendar .day-button.is-today small{color:#9a6b08}.follow-up-calendar .day-button.is-selected{background:#137c72;border-color:#137c72;color:#fff}.follow-up-calendar .day-button.is-selected small{color:#dff5ef}.follow-up-calendar .day-button.is-selected.is-friday{background:#b92f45;border-color:#b92f45}.follow-up-calendar .day-button.is-selected.is-today{background:#137c72;border-color:#137c72;color:#fff}.follow-up-calendar .day-button.is-selected.is-today small{color:#dff5ef}.follow-up-duplicate-note{padding:13px 15px;border-radius:9px;background:#f8f3e8;color:#765f2e;font-size:11px}
 .money-equivalent { display: block; color: var(--primary-dark); font-size: 12px; margin-top: 8px; }
 .clinical-form input, .clinical-form textarea, .clinical-form select { scroll-margin: 30px 0 130px; }
 @media (min-width: 992px) and (max-width: 1250px) {
@@ -1686,3 +1686,174 @@ td p {
     .history-card-wide { grid-column: auto; }
 }
 @media print { .entry-actions { display: none; } }
+
+/* Softer clinic theme: remove harsh pure-white surfaces while keeping contrast readable. */
+:root{
+    --canvas:#eef5f1;
+    --surface-soft:#f7fbf8;
+    --surface-warm:#fbf8ef;
+    --surface-tint:#f1f7f3;
+    --field-bg:#fbf9f1;
+    --line:#d9e7df;
+}
+body{
+    background:
+        radial-gradient(circle at top right, rgba(199,232,218,.36), transparent 34rem),
+        linear-gradient(135deg,#eef5f1 0%,#f6f1e5 100%);
+}
+.app-sidebar,
+.surface,
+.form-groups,
+.profile-box,
+.entry-section,
+.visit-history,
+.visit-history-panel,
+.chart-card,
+.stat-card,
+.table-scroll,
+table,
+.visit-date-filter{
+    background:var(--surface-soft);
+}
+.app-topbar{
+    background:linear-gradient(180deg,rgba(247,251,248,.86),rgba(247,251,248,.45));
+}
+.app-sidebar{
+    background:linear-gradient(180deg,#f6faf7 0%,#f1f7f3 100%);
+}
+.workspace-note,
+.nav-link:hover,
+thead th,
+tbody tr:hover,
+.today-shift>header,
+.history-card>summary{
+    background:var(--surface-tint);
+}
+.form-control,
+select,
+.selctbime,
+.clinic-field .form-control,
+.appointment-list__head select{
+    background:var(--field-bg);
+    border-color:#d7e3db;
+}
+.form-control:focus,
+.clinic-field .form-control:focus{
+    background:#fffdf7;
+}
+.entry-actions{
+    background:rgba(247,251,248,.94);
+}
+.patient-context-icon,
+.patient-option,
+.active-reminders-list article{
+    background:#fbf8ef;
+}
+.visit-history-panel,
+.history-card,
+.today-shift,
+.reminder-dashboard-item,
+.follow-up-item{
+    background:#fbfdf9;
+}
+
+/* Darker comfort pass for large dashboard and content surfaces. */
+:root{
+    --canvas:#dfeae4;
+    --surface-soft:#edf5ef;
+    --surface-warm:#f0eadb;
+    --surface-tint:#e5f0e9;
+    --field-bg:#f1eddf;
+    --line:#cbded3;
+}
+body{
+    background:
+        radial-gradient(circle at top right, rgba(149,195,176,.34), transparent 32rem),
+        linear-gradient(135deg,#dfeae4 0%,#e9dfca 100%);
+}
+.mainsection{
+    background:linear-gradient(180deg,rgba(223,234,228,.42),rgba(233,223,202,.22));
+}
+.app-sidebar{
+    background:linear-gradient(180deg,#e8f2ec 0%,#dfece5 100%);
+    border-left-color:#c7dbcf;
+}
+.welcome-banner{
+    background:linear-gradient(135deg,#d7e7dd 0%,#e8dcc2 100%);
+    border-color:#c5d7cb;
+}
+.welcome-banner .btn,
+.art-heart{
+    background:#e6eadc;
+    border-color:#cad9ce;
+}
+.surface,
+.form-groups,
+.profile-box,
+.entry-section,
+.visit-history-panel,
+.appointment-card,
+.appointment-list{
+    background:#edf5ef!important;
+    border-color:#cbded3!important;
+    box-shadow:0 8px 26px rgba(36,79,62,.08);
+}
+.stat-card{
+    background:linear-gradient(180deg,#eaf3ed 0%,#e3eee7 100%)!important;
+    border-color:#c7dbcf!important;
+}
+.dashboard-appointments,
+.dashboard-today-visits,
+.dashboard-reminders,
+.recent-visits,
+.quick-actions{
+    background:#eaf3ed!important;
+}
+.today-shift,
+.table-scroll,
+table,
+.visit-history,
+.history-card,
+.chart-card{
+    background:#e6f0e9!important;
+    border-color:#c5d9ce!important;
+}
+.today-shift>header,
+thead th,
+.section-heading,
+.history-card>summary{
+    background:#dceae2!important;
+}
+tbody tr:hover{
+    background:#dbe9e1!important;
+}
+.quick-action,
+.reminder-dashboard-item,
+.active-reminders-list article,
+.patient-option,
+.patient-context-icon,
+.follow-up-item{
+    background:#e8f0e4!important;
+    border-color:#c9dbcf!important;
+}
+.quick-icon,
+.workspace-note,
+.care-note{
+    background:#dce9df!important;
+}
+.form-control,
+select,
+.selctbime,
+.clinic-field .form-control,
+.appointment-list__head select{
+    background:#f0eadb!important;
+    border-color:#c8d8cc!important;
+}
+.form-control:focus,
+.clinic-field .form-control:focus{
+    background:#f5efdF!important;
+}
+.entry-actions{
+    background:rgba(230,240,233,.96)!important;
+    border-color:#c5d9ce!important;
+}

@@ -88,6 +88,8 @@
         var grid = document.getElementById('appointment-days');
         var daysByMonth = JSON.parse(form.dataset.monthDays || '{}');
         var weekdaysByMonth = JSON.parse(form.dataset.monthWeekdays || '{}');
+        var todayMonth = Number(form.dataset.todayMonth || 0);
+        var todayDay = Number(form.dataset.todayDay || 0);
         function renderDays() {
             var count = Number(daysByMonth[month.value] || 31);
             var selected = Number(dayInput.value);
@@ -97,6 +99,7 @@
                 var weekday = (weekdaysByMonth[month.value] || {})[day] || '';
                 var button = document.createElement('button');
                 button.type = 'button'; button.className = 'day-button' + (weekday === 'جمعه' ? ' is-friday' : '');
+                if (Number(month.value) === todayMonth && day === todayDay) button.classList.add('is-today');
                 button.innerHTML = '<strong>' + day + '</strong><small>' + weekday + '</small>';
                 button.setAttribute('aria-label', 'روز ' + day + '، ' + weekday);
                 if (day === selected) { button.classList.add('is-selected'); button.setAttribute('aria-pressed', 'true'); }

@@ -2,7 +2,7 @@
 @section('header_title', 'نوبت‌دهی')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=5">
+<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=6">
 
 <div class="appointment-heading">
     <div><h1 class="page-title">نوبت‌دهی</h1><p>ثبت سریع نوبت با تاریخ شمسی و اتصال خودکار به پرونده بیمار</p></div>
@@ -11,7 +11,7 @@
 
 <section class="appointment-card" aria-labelledby="new-appointment-title">
     <div class="appointment-card__title"><span aria-hidden="true">＋</span><div><h2 id="new-appointment-title">نوبت جدید</h2><small>شماره همراه را وارد کنید؛ پرونده موجود به‌صورت خودکار پیشنهاد می‌شود.</small></div></div>
-    <form method="post" action="{{ route('appointments.store') }}" id="appointment-form" data-patient-url="{{ route('appointments.patient') }}" data-month-days='@json($monthDays)' data-month-weekdays='@json($monthWeekdays)'>
+    <form method="post" action="{{ route('appointments.store') }}" id="appointment-form" data-patient-url="{{ route('appointments.patient') }}" data-month-days='@json($monthDays)' data-month-weekdays='@json($monthWeekdays)' data-today-month="{{ \Morilog\Jalali\Jalalian::now()->getMonth() }}" data-today-day="{{ \Morilog\Jalali\Jalalian::now()->getDay() }}">
         @csrf
         <input type="hidden" name="user_id" id="appointment-user-id" value="{{ old('user_id') }}">
         <div class="appointment-fields">

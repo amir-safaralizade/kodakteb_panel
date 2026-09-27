@@ -2,11 +2,11 @@
 @section('header_title', 'ویرایش نوبت')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=4">
+<link rel="stylesheet" href="{{ asset('matabgaleb/appointments.css') }}?v=6">
 <div class="appointment-heading"><div><h1 class="page-title">ویرایش نوبت</h1><p>{{ $appointment->patient_name }} · {{ $appointment->phone }}</p></div><a class="btn btn-outline-primary" href="{{ route('appointments.index', ['month' => $appointment->jalali_month]) }}">بازگشت به نوبت‌ها</a></div>
 
 <section class="appointment-card">
-    <form method="post" action="{{ route('appointments.update', $appointment) }}" id="appointment-edit-form" data-month-days='@json($monthDays)' data-month-weekdays='@json($monthWeekdays)'>
+    <form method="post" action="{{ route('appointments.update', $appointment) }}" id="appointment-edit-form" data-month-days='@json($monthDays)' data-month-weekdays='@json($monthWeekdays)' data-today-month="{{ \Morilog\Jalali\Jalalian::now()->getMonth() }}" data-today-day="{{ \Morilog\Jalali\Jalalian::now()->getDay() }}">
         @csrf @method('PUT')
         <input type="hidden" name="user_id" value="{{ $appointment->user_id }}">
         <input type="hidden" name="phone" value="{{ $appointment->phone }}">
@@ -25,8 +25,8 @@
 </section>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('appointment-edit-form'), month = document.getElementById('edit-month'), input = document.getElementById('edit-day'), grid = document.getElementById('edit-days'), counts = JSON.parse(form.dataset.monthDays || '{}'), weekdays = JSON.parse(form.dataset.monthWeekdays || '{}');
-    function render() { const max = Number(counts[month.value] || 31); let selected = Number(input.value); if (selected > max) { selected = 0; input.value = ''; } grid.innerHTML = ''; for (let day = 1; day <= max; day++) { const weekday = weekdays[month.value]?.[day] || ''; const button = document.createElement('button'); button.type = 'button'; button.className = 'day-button' + (day === selected ? ' is-selected' : '') + (weekday === 'جمعه' ? ' is-friday' : ''); button.innerHTML = '<strong>' + day + '</strong><small>' + weekday + '</small>'; button.setAttribute('aria-label', 'روز ' + day + '، ' + weekday); button.setAttribute('aria-pressed', day === selected ? 'true' : 'false'); button.addEventListener('click', function () { grid.querySelectorAll('.day-button').forEach(item => { item.classList.remove('is-selected'); item.setAttribute('aria-pressed', 'false'); }); button.classList.add('is-selected'); button.setAttribute('aria-pressed', 'true'); input.value = day; }); grid.appendChild(button); } }
+    const form = document.getElementById('appointment-edit-form'), month = document.getElementById('edit-month'), input = document.getElementById('edit-day'), grid = document.getElementById('edit-days'), counts = JSON.parse(form.dataset.monthDays || '{}'), weekdays = JSON.parse(form.dataset.monthWeekdays || '{}'), todayMonth = Number(form.dataset.todayMonth || 0), todayDay = Number(form.dataset.todayDay || 0);
+    function render() { const max = Number(counts[month.value] || 31); let selected = Number(input.value); if (selected > max) { selected = 0; input.value = ''; } grid.innerHTML = ''; for (let day = 1; day <= max; day++) { const weekday = weekdays[month.value]?.[day] || ''; const button = document.createElement('button'); button.type = 'button'; button.className = 'day-button' + (day === selected ? ' is-selected' : '') + (weekday === 'جمعه' ? ' is-friday' : '') + (Number(month.value) === todayMonth && day === todayDay ? ' is-today' : ''); button.innerHTML = '<strong>' + day + '</strong><small>' + weekday + '</small>'; button.setAttribute('aria-label', 'روز ' + day + '، ' + weekday); button.setAttribute('aria-pressed', day === selected ? 'true' : 'false'); button.addEventListener('click', function () { grid.querySelectorAll('.day-button').forEach(item => { item.classList.remove('is-selected'); item.setAttribute('aria-pressed', 'false'); }); button.classList.add('is-selected'); button.setAttribute('aria-pressed', 'true'); input.value = day; }); grid.appendChild(button); } }
     month.addEventListener('change', render); render();
 });
 </script>

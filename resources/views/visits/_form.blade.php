@@ -38,7 +38,7 @@
         @endforelse
     </div>
 </section>
-<form class="clinical-form" data-clinical-form data-follow-up-days='@json($followUpMonthDays ?? [])' data-follow-up-weekdays='@json($followUpMonthWeekdays ?? [])' method="post" autocomplete="off" action="{{ $editing ? route('visits.update', ['visit' => $visit->id, 'send_sms' => request('send_sms', 'false')]) : route('visits.store', $patient->id) }}">
+<form class="clinical-form" data-clinical-form data-follow-up-days='@json($followUpMonthDays ?? [])' data-follow-up-weekdays='@json($followUpMonthWeekdays ?? [])' data-today-month="{{ \Morilog\Jalali\Jalalian::now()->getMonth() }}" data-today-day="{{ \Morilog\Jalali\Jalalian::now()->getDay() }}" method="post" autocomplete="off" action="{{ $editing ? route('visits.update', ['visit' => $visit->id, 'send_sms' => request('send_sms', 'false')]) : route('visits.store', $patient->id) }}">
     @csrf
     @if($editing) @method('PUT') @endif
     @if($editing)

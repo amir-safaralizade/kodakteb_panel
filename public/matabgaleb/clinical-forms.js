@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const followUpGrid = form.querySelector('[data-follow-up-days-grid]');
         const followUpDays = JSON.parse(form.dataset.followUpDays || '{}');
         const followUpWeekdays = JSON.parse(form.dataset.followUpWeekdays || '{}');
+        const todayMonth = Number(form.dataset.todayMonth || 0);
+        const todayDay = Number(form.dataset.todayDay || 0);
         function renderFollowUpDays() {
             if (!followUpMonth || !followUpDay || !followUpGrid) return;
             const count = Number(followUpDays[followUpMonth.value] || 31);
@@ -22,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const button = document.createElement('button');
                 button.type = 'button';
                 button.className = 'day-button' + (day === selected ? ' is-selected' : '') + (weekday === 'جمعه' ? ' is-friday' : '');
+                if (Number(followUpMonth.value) === todayMonth && day === todayDay) button.classList.add('is-today');
                 button.innerHTML = '<strong>' + day + '</strong><small>' + weekday + '</small>';
                 button.setAttribute('aria-label', 'روز ' + day + '، ' + weekday);
                 button.addEventListener('click', () => {
