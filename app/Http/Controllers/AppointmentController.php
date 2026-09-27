@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AppointmentRequest;
 use App\Models\Appointment;
 use App\Models\User;
+use App\MyHelpers\MyJalaliDate;
 use App\services\ClinicInput;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Morilog\Jalali\CalendarUtils;
 use Morilog\Jalali\Jalalian;
 
@@ -89,6 +91,21 @@ class AppointmentController extends Controller
             ->with('success', $createdPatient
                 ? 'پرونده جدید ساخته شد و نوبت به آن متصل گردید.'
                 : 'نوبت ثبت و به پرونده بیمار متصل شد.');
+    }
+
+    public function all(Request $request)
+    {
+        [$from, $to] = $this->dateRange($request);
+
+        $items = Appointment::with('user')
+            ->when($from, fn ($query) => $query->whereDate('appointment_date', '>=', $from))
+            ->when($to, fn ($query) => $query->whereDate('appointment_date', '<=', $to))
+            ->orderByDesc('appointment_date')
+            ->orderBy('appointment_time')
+            ->paginate(50)
+            ->appends($request->only(['from', 'to']));
+
+        return view('appointments.all', compact('items'));
     }
 
     public function findPatient(Request $request)
@@ -212,5 +229,35 @@ class AppointmentController extends Controller
 
         // Earlier reservations are reminded on the previous evening.
         return $date->copy()->subDay()->setTime(18, 0);
+    }
+
+    private function dateRange(Request $request): array
+    {
+        $request->merge([
+            'from' => ClinicInput::date($request->input('from')),
+            'to' => ClinicInput::date($request->input('to')),
+        ]);
+
+        $validJalaliDate = function ($attribute, $value, $fail) {
+            if (! preg_match('/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/', (string) $value, $parts)
+                || ! CalendarUtils::checkDate((int) ($parts[1] ?? 0), (int) ($parts[2] ?? 0), (int) ($parts[3] ?? 0))) {
+                $fail('تاریخ شمسی واردشده معتبر نیست.');
+            }
+        };
+
+        $request->validate([
+            'from' => ['nullable', 'string', $validJalaliDate],
+            'to' => ['nullable', 'string', $validJalaliDate],
+        ]);
+
+        $jalali = new MyJalaliDate;
+        $from = $request->filled('from') ? $jalali->jalaliToGeorgian($request->input('from')) : null;
+        $to = $request->filled('to') ? $jalali->jalaliToGeorgian($request->input('to')) : null;
+
+        if ($from && $to && $from > $to) {
+            throw ValidationException::withMessages(['to' => 'تاریخ پایان باید بعد از تاریخ شروع باشد.']);
+        }
+
+        return [$from, $to];
     }
 }

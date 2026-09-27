@@ -5,7 +5,9 @@
         <span class="nav-caption">فضای کار</span>
         <a class="nav-link {{ request()->routeIs('DashBord') ? 'is-active' : '' }}" href="{{ route('DashBord') }}"><span class="nav-symbol" aria-hidden="true">⌂</span> نمای کلی</a>
         <a class="nav-link {{ request()->routeIs('visits.todaysvisit') ? 'is-active' : '' }}" href="{{ route('visits.todaysvisit') }}"><span class="nav-symbol" aria-hidden="true">◷</span> ویزیت‌های امروز</a>
-        <a class="nav-link {{ request()->routeIs('appointments.*') ? 'is-active' : '' }}" href="{{ route('appointments.index') }}"><span class="nav-symbol" aria-hidden="true">▦</span> نوبت‌دهی</a>
+        <a class="nav-link {{ request()->routeIs('appointments.index', 'appointments.edit', 'appointments.patient') ? 'is-active' : '' }}" href="{{ route('appointments.index') }}"><span class="nav-symbol" aria-hidden="true">▦</span> نوبت‌دهی</a>
+        <a class="nav-link {{ request()->routeIs('appointments.all') ? 'is-active' : '' }}" href="{{ route('appointments.all') }}"><span class="nav-symbol" aria-hidden="true">☷</span> همه نوبت‌ها</a>
+        <a class="nav-link {{ request()->routeIs('reminders.index') ? 'is-active' : '' }}" href="{{ route('reminders.index') }}"><span class="nav-symbol" aria-hidden="true">◌</span> همه یادآورها</a>
         <span class="nav-caption">پرونده و درمان</span>
         <a class="nav-link {{ request()->routeIs('user.index', 'user.show', 'user.edit', 'user.search') ? 'is-active' : '' }}" href="{{ route('user.index') }}"><span class="nav-symbol" aria-hidden="true">▤</span> پرونده بیماران</a>
         <a class="nav-link {{ request()->routeIs('user.create') ? 'is-active' : '' }}" href="{{ route('user.create') }}"><span class="nav-symbol" aria-hidden="true">＋</span> تشکیل پرونده</a>

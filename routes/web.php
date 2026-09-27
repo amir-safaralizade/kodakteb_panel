@@ -1,15 +1,16 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CronController;
+use App\Http\Controllers\front\FrontController;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\SmsController;
+use App\Http\Controllers\StatisicsController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisitsController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\IndexController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\CronController;
-use App\Http\Controllers\StatisicsController;
-use App\Http\Controllers\SmsController;
-use App\Http\Controllers\front\FrontController;
-use App\Http\Controllers\AppointmentController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,10 +30,9 @@ Route::get('/admins', function () {
     return redirect()->route('login');
 });
 
-
-Route::get('info' , [FrontController::class , 'info']);
-Route::get('profile' , [FrontController::class , 'info']);
-Route::get('sendprofilesms' , [FrontController::class , 'sendprofilesms']);
+Route::get('info', [FrontController::class, 'info']);
+Route::get('profile', [FrontController::class, 'info']);
+Route::get('sendprofilesms', [FrontController::class, 'sendprofilesms']);
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'login')->name('login');
@@ -69,7 +69,9 @@ Route::middleware(['auth:admin'])->prefix('dashbord')->group(function () {
     Route::resource('messages', SmsController::class);
 
     Route::get('appointments/patient', [AppointmentController::class, 'findPatient'])->name('appointments.patient')->middleware('throttle:120,1');
+    Route::get('appointments-all', [AppointmentController::class, 'all'])->name('appointments.all');
     Route::resource('appointments', AppointmentController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
+    Route::get('reminders', [VisitsController::class, 'reminders'])->name('reminders.index');
 
     Route::get('add/admin', [AuthController::class, 'addAdmin'])->name('admins.add');
 });

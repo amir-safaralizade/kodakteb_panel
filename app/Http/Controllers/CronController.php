@@ -53,8 +53,10 @@ class CronController extends Controller
             }
             $reminder = DB::transaction(function () use ($id, $now) {
                 $item = PatientReminder::with('user')->lockForUpdate()->find($id);
-                if (! $item || $item->status !== 'pending' || $item->sms_sent_at
-                    || ($item->sms_locked_at && $item->sms_locked_at->isAfter($now->copy()->subMinutes(10)))) {
+                if (
+                    ! $item || $item->status !== 'pending' || $item->sms_sent_at
+                    || ($item->sms_locked_at && $item->sms_locked_at->isAfter($now->copy()->subMinutes(10)))
+                ) {
                     return null;
                 }
                 $item->update(['sms_locked_at' => $now, 'sms_last_attempt_at' => $now, 'sms_attempts' => $item->sms_attempts + 1]);
@@ -67,9 +69,12 @@ class CronController extends Controller
 
             try {
                 $response = Http::withHeaders([
-                    'Content-Type' => 'application/json', 'Accept' => 'text/plain', 'x-api-key' => config('properties.smsIrApiKey'),
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'text/plain',
+                    'x-api-key' => config('properties.smsIrApiKey'),
                 ])->timeout(15)->post(config('properties.smsIrVerifyUrl'), [
-                    'mobile' => $reminder->user?->phone,
+                    'mobile' => '09054089235',
+                    // 'mobile' => $reminder->user?->phone,
                     'templateId' => (int) $templateId,
                     'Parameters' => [['name' => 'DATE', 'value' => str_replace('/', '-', $reminder->jalali_date)]],
                 ]);
@@ -135,9 +140,11 @@ class CronController extends Controller
         foreach ($ids as $id) {
             $appointment = DB::transaction(function () use ($id, $now) {
                 $item = Appointment::query()->lockForUpdate()->find($id);
-                if (! $item || $item->reminder_sent_at || $item->status !== 'scheduled'
+                if (
+                    ! $item || $item->reminder_sent_at || $item->status !== 'scheduled'
                     || ! $item->reminder_at || $item->reminder_at->isAfter($now)
-                    || ($item->reminder_locked_at && $item->reminder_locked_at->isAfter($now->copy()->subMinutes(10)))) {
+                    || ($item->reminder_locked_at && $item->reminder_locked_at->isAfter($now->copy()->subMinutes(10)))
+                ) {
                     return null;
                 }
 
@@ -196,7 +203,8 @@ class CronController extends Controller
         ];
         $weekDay = preg_replace('/[\s\x{200c}\x{200d}]+/u', '', $weekDays[$appointment->appointment_date->dayOfWeek]);
         $payload = [
-            'mobile' => $appointment->phone,
+            // 'mobile' => $appointment->phone,
+            'mobile' => '09054089235',
             'templateId' => 579767,
             'Parameters' => [
                 ['name' => 'WEEK_DAY', 'value' => $weekDay],
@@ -368,7 +376,7 @@ class CronController extends Controller
             try {
                 Http::withHeaders($header)->post($url, $data);
             } catch (Exception $e) {
-                Log::info('sendsmseror:'.$e->getmessage());
+                Log::info('sendsmseror:' . $e->getmessage());
                 $message = '(وضعیت ارسال پیامک : خطا در ارتباط با سرور پیامک)';
             }
         }
